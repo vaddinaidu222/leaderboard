@@ -26,7 +26,7 @@ class LeaderboardController extends Controller
 
     public function search(Request $request)
     {
-        // Logic to search user by ID
+       
         $userId = $request->input('user_id');
         $user = User::withCount('activities')->find($userId);
 
@@ -95,7 +95,7 @@ class LeaderboardController extends Controller
                     $currentMonthlyRank++; 
                 }
             
-                // Calculate yearly rank
+               
                 $yearlyRankingData = User::withCount(['activities' => function ($query) {
                     $query->whereYear('activity_date', now()->year);
                 }])
