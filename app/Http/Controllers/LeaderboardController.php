@@ -29,6 +29,9 @@ class LeaderboardController extends Controller
        
         $userId = $request->input('user_id');
         $user = User::withCount('activities')->find($userId);
+      
+        $user->finalRank = $user->rank->daily_rank ?? 'N/A';
+       
 
         return view('leaderboard.index', ['users' => $user ? [$user] : []]);
     }
