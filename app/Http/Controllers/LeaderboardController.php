@@ -41,20 +41,36 @@ class LeaderboardController extends Controller
     {
            
             $users = User::withCount('activities')->get();
+            // $dailyActivitiesCount = $user->activities()->whereDate('activity_date', now())->count();
+            // $monthlyActivitiesCount = $user->activities()->whereMonth('activity_date', now()->month)
+            //                                           ->whereYear('activity_date', now()->year)
+            //                                           ->count();
+            // $yearlyActivitiesCount = $user->activities()->whereYear('activity_date', now()->year)->count();
+            $dailyRankingData = User::withCount(['activities' => function ($query) {
+                $query->whereDate('activity_date', now());
+            }])
+            ->orderBy('activities_count', 'desc') 
+            ->get();
+
+            $monthlyRankingData = User::withCount(['activities' => function ($query) {
+                $query->whereMonth('activity_date', now()->month)
+                      ->whereYear('activity_date', now()->year);
+            }])
+            ->orderBy('activities_count', 'desc')
+            ->get();
+
+            $yearlyRankingData = User::withCount(['activities' => function ($query) {
+                $query->whereYear('activity_date', now()->year);
+            }])
+            ->orderBy('activities_count', 'desc')
+            ->get();
+
             foreach ($users as $user) {
          
-                $dailyActivitiesCount = $user->activities()->whereDate('activity_date', now())->count();
-                $monthlyActivitiesCount = $user->activities()->whereMonth('activity_date', now()->month)
-                                                          ->whereYear('activity_date', now()->year)
-                                                          ->count();
-                $yearlyActivitiesCount = $user->activities()->whereYear('activity_date', now()->year)->count();
+               
             
                
-                $dailyRankingData = User::withCount(['activities' => function ($query) {
-                    $query->whereDate('activity_date', now());
-                }])
-                ->orderBy('activities_count', 'desc') 
-                ->get();
+               
             
                 $dailyRanking = 1; 
                 $previousCount = null; 
@@ -74,12 +90,7 @@ class LeaderboardController extends Controller
                 }
             
               
-                $monthlyRankingData = User::withCount(['activities' => function ($query) {
-                    $query->whereMonth('activity_date', now()->month)
-                          ->whereYear('activity_date', now()->year);
-                }])
-                ->orderBy('activities_count', 'desc')
-                ->get();
+               
             
                 $monthlyRanking = 1;
                 $previousMonthlyCount = null;
@@ -99,11 +110,7 @@ class LeaderboardController extends Controller
                 }
             
                
-                $yearlyRankingData = User::withCount(['activities' => function ($query) {
-                    $query->whereYear('activity_date', now()->year);
-                }])
-                ->orderBy('activities_count', 'desc')
-                ->get();
+                
             
                 $yearlyRanking = 1;
                 $previousYearlyCount = null;

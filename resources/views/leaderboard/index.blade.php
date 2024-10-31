@@ -42,10 +42,10 @@
             </tbody>
         </table>
 
-        <form id="recalculate-form" method="POST" action="{{ route('leaderboard.recalculate') }}">
+        <!-- <form id="recalculate-form" method="POST" action="{{ route('leaderboard.recalculate') }}"> -->
             @csrf
             <button type="button" id="recalculate-button">Recalculate Leaderboard</button>
-        </form>
+        <!-- </form> -->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
